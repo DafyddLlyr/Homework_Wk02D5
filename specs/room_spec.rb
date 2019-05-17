@@ -3,6 +3,7 @@ require("minitest/rg")
 require_relative("../room")
 require_relative("../guest")
 require_relative("../song")
+require("pry")
 
 class RoomTest < MiniTest::Test
 
@@ -24,6 +25,18 @@ class RoomTest < MiniTest::Test
 
   def test_room_entry_fee
     assert_equal(10, @room_1.entry_fee)
+  end
+
+  def test_guests
+    assert_equal([], @room_1.guests)
+  end
+
+  def test_gross
+    assert_equal(0, @room_1.gross)
+  end
+
+  def test_history
+    assert_equal([], @room_1.history)
   end
 
   def test_playlist__inital_state
@@ -78,6 +91,34 @@ class RoomTest < MiniTest::Test
     @room_1.skip_song(2)
     assert_equal(@song_3, @room_1.current_song)
   end
+
+  def test_check_in__one_guest
+    @room_1.check_in(@guest_1)
+    assert_equal(1, @room_1.guests.length)
+    assert_equal(true, @room_1.guests.include?(@guest_1))
+    assert_equal([{name: "David", purchase: "entry fee", cost: 10}], @room_1.history)
+  end
+
+  def test_check_in__too_many_guests
+    9.times { @room_1.check_in(@guest_1) }
+    assert_equal(8, @room_1.guests.length)
+  end
+
+  def test_check_out__exisiting_guest
+    @room_1.check_in(@guest_1)
+    @room_1.check_out(@guest_1)
+    assert_equal(false, @room_1.guests.include?(@guest_1))
+    assert_equal(0, @room_1.guests.length)
+  end
+
+  def test_check_out__non_exisiting_guest
+    @room_1.check_in(@guest_1)
+    @room_1.check_out(@guest_2)
+    assert_equal(1, @room_1.guests.length)
+    assert_equal(false, @room_1.guests.include?(@guest_2))
+  end
+
+
 
 
 end
