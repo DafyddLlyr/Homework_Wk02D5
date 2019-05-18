@@ -33,4 +33,10 @@ class Guest
     return "Woohoo!" if room.playlist.include?(@favourite_song)
   end
 
+  def buy_drink(drink, bar, room)
+    return if drink.price > @wallet
+    @wallet -= drink.price
+    bar.sell_drink(drink, room, self)
+  end
+
 end

@@ -3,16 +3,24 @@ require("minitest/rg")
 require_relative("../room")
 require_relative("../guest")
 require_relative("../song")
+require_relative("../drink")
+require_relative("../bar")
 require("pry")
 
 class RoomTest < MiniTest::Test
 
   def setup
     @room_1 = Room.new("80s Party Room", 8, 10)
+    @room_2 = Room.new("60s Pop", 2, 10)
     @song_1 = Song.new("Life on Mars")
     @song_2 = Song.new("Rocketman")
     @song_3 = Song.new("In The Air Tonight")
     @guest_1 = Guest.new("David", 30, @song_1, 100)
+    @guest_2 = Guest.new("Eve", 35, @song_1, 100)
+    @guest_3 = Guest.new("Carol", 36, @song_1, 100)
+    @drink_1 = Drink.new("Beer", 5)
+    @drink_2 = Drink.new("Whisky", 10)
+    @bar = Bar.new("Dafydd's Karaoke Bar", 100, {@drink_1=>25, @drink_2=>30})
   end
 
   def test_room_name
@@ -100,8 +108,17 @@ class RoomTest < MiniTest::Test
   end
 
   def test_check_in__too_many_guests
-    9.times { @room_1.check_in(@guest_1) }
-    assert_equal(8, @room_1.guests.length)
+    @room_2.check_in(@guest_1)
+    @room_2.check_in(@guest_2)
+    @room_2.check_in(@guest_3)
+    assert_equal(2, @room_2.guests.length)
+    assert_equal(false, @room_2.guests.include?(@guest_3))
+  end
+
+  def check_in__existing_guest
+    @room_1.check_in(@guest_1)
+    @room_1.check_in(@guest_1)
+    assert_equal(1, @room_2.guests.length)
   end
 
   def test_check_out__exisiting_guest
@@ -118,6 +135,10 @@ class RoomTest < MiniTest::Test
     assert_equal(false, @room_1.guests.include?(@guest_2))
   end
 
+  def test_record_order
+    @guest_1.buy_drink(@drink_1, @bar, @room_1)
+    assert_equal(@room_1.history, [{name: "David", purchase: @drink_1, cost: 5}])
+  end
 
 
 
