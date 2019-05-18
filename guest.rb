@@ -11,6 +11,7 @@ class Guest
 
   def join_room(room)
     @wallet -= room.entry_fee
+    room.check_in(self)
   end
 
   def leave_room(room)

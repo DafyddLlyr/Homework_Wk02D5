@@ -1,7 +1,6 @@
 class Room
 
-  attr_reader :name, :capacity, :entry_fee, :playlist, :current_song_index, :guests, :gross
-  attr_accessor :history
+  attr_reader :name, :capacity, :entry_fee, :playlist, :current_song_index, :guests, :gross, :history
 
   def initialize(name, capacity, entry_fee)
     @name = name
@@ -35,8 +34,8 @@ class Room
     return if @guests.length == capacity
     return if @guests.include?(guest)
     @guests.push(guest)
-    @history.push({name: guest.name, purchase: "entry fee", cost: @entry_fee})
-    guest.join_room(self)
+    @history.push({guest: guest, purchase: "entry fee", cost: @entry_fee})
+    @gross += @entry_fee
   end
 
   def check_out(guest)
@@ -45,7 +44,8 @@ class Room
   end
 
   def record_order(drink, guest)
-    @history.push({name: guest.name, purchase: drink, cost: drink.price})
+    @history.push({guest: guest, purchase: drink, cost: drink.price})
+    @gross += drink.price
   end
 
 

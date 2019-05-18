@@ -1,7 +1,6 @@
 class Bar
 
-  attr_reader :name, :till
-  attr_accessor :stock
+  attr_reader :name, :till, :stock
 
   def initialize(name, till, stock)
     @name = name
