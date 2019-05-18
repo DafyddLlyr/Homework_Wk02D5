@@ -48,6 +48,4 @@ class Room
     @gross += drink.price
   end
 
-
-
 end
