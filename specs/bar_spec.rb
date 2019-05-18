@@ -17,7 +17,7 @@ class TestBar < MiniTest::Test
   end
 
   def test_bar_name
-    assert_equal("Dafydd's Karaoke Bar", @bar.name)
+    assert_equal("Downstairs Bar", @bar.name)
   end
 
   def test_bar_till
