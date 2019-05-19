@@ -144,6 +144,4 @@ class RoomTest < MiniTest::Test
     assert_equal(5, @room_1.gross)
   end
 
-
-
 end
