@@ -4,6 +4,7 @@ require_relative("../bar")
 require_relative("../drink")
 require_relative("../guest")
 require_relative("../song")
+require_relative("../room")
 
 class TestBar < MiniTest::Test
 
@@ -14,6 +15,7 @@ class TestBar < MiniTest::Test
     @song_1 = Song.new("Dancing in the Moonlight")
     @guest_1 = Guest.new("Gina", 16, @song_1, 20)
     @guest_2 = Guest.new("Tim", 25, @song_1, 100)
+    @room_1 = Room.new("90s Heaven", 8, 10)
   end
 
   def test_bar_name
@@ -33,8 +35,13 @@ class TestBar < MiniTest::Test
     assert_equal(false, @bar.serve?(@guest_1))
   end
 
-  def test_serve__under_18
+  def test_serve__over_18
     assert_equal(true, @bar.serve?(@guest_2))
+  end
+
+  def test_sell_drink
+    @bar.sell_drink(@drink_2, @room_1, @guest_2)
+    assert_equal(110, @bar.till)
   end
 
 end

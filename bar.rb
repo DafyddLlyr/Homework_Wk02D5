@@ -19,6 +19,7 @@ class Bar
   def sell_drink(drink, room, guest)
     return if serve?(guest) == false
     reduce_stock(drink)
+    @till += drink.price
     room.record_order(drink, guest)
   end
 
